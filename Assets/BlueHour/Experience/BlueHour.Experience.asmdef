@@ -1,0 +1,5 @@
+{
+    "name": "BlueHour.Experience",
+    "rootNamespace": "BlueHour.Experience",
+    "references": ["Unity.InputSystem"]
+}
