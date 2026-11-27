@@ -42,3 +42,9 @@
 | chromis_viridis | 그린 크로미스 · *Chromis viridis* | 산호 연관 군집 유영 확인. 분리·정렬·응집을 검증한다. [리저드섬 군집 유영 연구](https://pmc.ncbi.nlm.nih.gov/articles/PMC6215405/) |
 | taeniura_lymma | 파란점가오리 · *Taeniura lymma* | 리저드섬 기록과 모래·암초 연관 서식 확인. 해저 인접 유영·휴식과 접근 회피를 검증한다. [호주박물관 현장 기록](https://lifg.australian.museum/Group.html?groupId=prUGMQjZ&hierarchyId=qBHH2Q3E) · [해양공원청 자료](https://elibrary.gbrmpa.gov.au/bitstreams/a470cd33-3085-4cde-abca-d5c0612ab40d/download) |
 | acropora_millepora | 밀레포라 가지산호 · *Acropora millepora* | 케펠 제도 분포와 가지형 돌산호 확인. 고정형 표시를 검증한다. [AIMS 현장 연구](https://www.aims.gov.au/information-centre/news-and-stories/bleaching-can-hamper-reproduction-and-recovery-corals) |
+
+### M4 출현 프로토타입
+
+승인된 M2 5종의 임시 모델로 출현 시스템을 검증한다. 시작 산호초의 16개체, 모래 해저의 가오리, 해초 군락과 개방 수역의 크로미스, 개방 수역의 대형 군집 이벤트를 사용한다. 추가 위치에는 서식지·수심·시각·계절·구름량 조건과 테스트용 가중치가 적용된다. 대형 군집은 동시에 한 번만 활성화하며 종료 후 재발생 대기 시간을 둔다.
+
+카메라 위치 기준 출현 거리와 반환 거리를 분리하고, 처음 활성화하거나 풀로 반환할 때 개체가 화면에 들어오는지 확인한다. 활성 개체 상한은 테스트 기준 32개체다. 출현 확률, 계절·시간 조건과 지속 시간은 체험 검증용 설정값이다. 전체 30종의 선정·출처 승인과 최종 에셋은 추후 확장 범위로 유지한다.

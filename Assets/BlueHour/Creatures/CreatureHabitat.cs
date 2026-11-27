@@ -16,6 +16,7 @@ namespace BlueHour.Creatures
             public SpeciesDefinition species;
             public Transform anchor;
             [Min(1)] public int count = 1;
+            public bool startActive = true;
         }
 
         private sealed class Agent
@@ -32,6 +33,7 @@ namespace BlueHour.Creatures
             public readonly Agent[] Agents;
             public readonly Vector3[] Positions;
             public readonly Vector3[] Velocities;
+            public bool Active;
 
             public Group(Population definition)
             {
@@ -48,12 +50,18 @@ namespace BlueHour.Creatures
         [SerializeField] private Bounds swimBounds =
             new Bounds(new Vector3(0f, -12.65f, 0f), new Vector3(90f, 23.5f, 90f));
         [SerializeField] private int seed = 625;
+        [SerializeField, Min(1)] private int activeCap = 32;
 
         private Group[] groups;
         private Vector3[] homes;
         private bool populationActive;
 
         public int PopulationSize { get; private set; }
+        public int ActiveCap => activeCap;
+        public bool IsGroupActive(int index) => groups[index].Active;
+        public int GroupCount => populations.Length;
+        public bool HasGroupAnchor(int index, Transform anchor) =>
+            index >= 0 && index < populations.Length && populations[index].anchor == anchor;
 
         private void Awake()
         {
@@ -68,7 +76,7 @@ namespace BlueHour.Creatures
             homes = new Vector3[populations.Length];
             var anchors = new Dictionary<string, Transform>(StringComparer.Ordinal);
             foreach (var population in populations)
-                anchors.Add(population.species.SpeciesId, population.anchor);
+                anchors.TryAdd(population.species.SpeciesId, population.anchor);
 
             for (var index = 0; index < groups.Length; index++)
             {
@@ -106,40 +114,84 @@ namespace BlueHour.Creatures
                 return;
 
             populationActive = active;
-            PopulationSize = 0;
-            var random = active ? new System.Random(seed) : null;
             for (var index = 0; index < groups.Length; index++)
+                TrySetGroupActive(index, active && groups[index].Definition.startActive);
+        }
+
+        public bool TrySetGroupActive(int index, bool active)
+        {
+            if (groups == null || index < 0 || index >= groups.Length || (active && !populationActive))
+                return false;
+
+            var group = groups[index];
+            if (group.Active == active)
+                return true;
+            if (active && PopulationSize + group.Agents.Length > activeCap)
+                return false;
+
+            var type = group.Definition.species.Locomotion;
+            var random = active ? new System.Random(unchecked(seed + index * 1013)) : null;
+            for (var member = 0; member < group.Agents.Length; member++)
             {
-                var group = groups[index];
-                var type = group.Definition.species.Locomotion;
-                for (var member = 0; member < group.Agents.Length; member++)
+                var agent = group.Agents[member];
+                agent.Velocity = Vector3.zero;
+                if (!active)
                 {
-                    var agent = group.Agents[member];
-                    agent.Velocity = Vector3.zero;
-                    if (!active)
-                    {
-                        agent.Scale = 1f;
-                        agent.Brain.Reset(type, 0f);
-                        agent.View.Clear();
-                        continue;
-                    }
-
-                    agent.Scale = Mathf.Lerp(0.86f, 1.14f, (float)random.NextDouble());
-                    var phase = (float)random.NextDouble();
-                    agent.Brain.Reset(type, phase);
-                    var position = group.Definition.anchor.position;
-                    if (type == Locomotion.Schooling)
-                    {
-                        var angle = member * Mathf.PI * 2f / group.Agents.Length;
-                        position += new Vector3(Mathf.Cos(angle) * 1.6f,
-                            (member % 3 - 1) * 0.35f, Mathf.Sin(angle) * 1.6f);
-                    }
-
-                    agent.View.Place(position, phase * 360f, agent.Scale);
-                    agent.View.gameObject.SetActive(true);
-                    PopulationSize++;
+                    agent.Scale = 1f;
+                    agent.Brain.Reset(type, 0f);
+                    agent.View.Clear();
+                    continue;
                 }
+
+                agent.Scale = Mathf.Lerp(0.86f, 1.14f, (float)random.NextDouble());
+                var phase = (float)random.NextDouble();
+                agent.Brain.Reset(type, phase);
+                agent.View.Place(SpawnPosition(group, member), phase * 360f, agent.Scale);
+                agent.View.gameObject.SetActive(true);
             }
+
+            group.Active = active;
+            PopulationSize += active ? group.Agents.Length : -group.Agents.Length;
+            return true;
+        }
+
+        public bool CanPlaceGroup(int index)
+        {
+            var group = groups[index];
+            var locomotion = group.Definition.species.Locomotion;
+            var radius = locomotion == Locomotion.BottomDwelling ? 0.48f : 0.16f;
+            for (var member = 0; member < group.Agents.Length; member++)
+            {
+                var position = SpawnPosition(group, member);
+                if (!swimBounds.Contains(position)
+                    || (locomotion != Locomotion.Fixed && Physics.CheckSphere(position, radius,
+                        obstacleLayers, QueryTriggerInteraction.Ignore)))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool IsGroupVisible(int index, Plane[] frustum)
+        {
+            var group = groups[index];
+            for (var member = 0; member < group.Agents.Length; member++)
+            {
+                var position = group.Active ? group.Agents[member].View.transform.position : SpawnPosition(group, member);
+                if (GeometryUtility.TestPlanesAABB(frustum, new Bounds(position, Vector3.one * 1.8f)))
+                    return true;
+            }
+            return false;
+        }
+
+        private static Vector3 SpawnPosition(Group group, int member)
+        {
+            var position = group.Definition.anchor.position;
+            if (group.Definition.species.Locomotion != Locomotion.Schooling)
+                return position;
+
+            var angle = member * Mathf.PI * 2f / group.Agents.Length;
+            return position + new Vector3(Mathf.Cos(angle) * 1.6f,
+                (member % 3 - 1) * 0.35f, Mathf.Sin(angle) * 1.6f);
         }
 
         private void Update()
@@ -154,7 +206,7 @@ namespace BlueHour.Creatures
             {
                 var group = groups[index];
                 var species = group.Definition.species;
-                if (species.Locomotion == Locomotion.Fixed)
+                if (!group.Active || species.Locomotion == Locomotion.Fixed)
                     continue;
 
                 // Read one snapshot for the whole school so order never changes neighbor state.
@@ -211,7 +263,7 @@ namespace BlueHour.Creatures
 
         public bool TryValidate(out string error)
         {
-            if (populations == null || populations.Length == 0)
+            if (populations == null || populations.Length == 0 || activeCap < 1)
             {
                 error = "Creature habitat needs at least one configured population.";
                 return false;
@@ -232,7 +284,7 @@ namespace BlueHour.Creatures
                 if (!species.TryValidate(out error))
                     return false;
 
-                if (!speciesById.TryAdd(species.SpeciesId, species))
+                if (!speciesById.TryAdd(species.SpeciesId, species) && speciesById[species.SpeciesId] != species)
                 {
                     error = "Duplicate species ID: " + species.SpeciesId;
                     return false;
