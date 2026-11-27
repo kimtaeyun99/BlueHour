@@ -24,8 +24,8 @@ Shader "BlueHour/Prototype Suspended Particles"
             }
             half4 Fragment(Output input) : SV_Target
             {
-                float2 point = input.uv * 2.0 - 1.0;
-                half fade = saturate(1.0 - dot(point, point));
+                float2 radialOffset = input.uv * 2.0 - 1.0;
+                half fade = saturate(1.0 - dot(radialOffset, radialOffset));
                 return half4(input.color.rgb, input.color.a * fade * fade);
             }
             ENDHLSL
