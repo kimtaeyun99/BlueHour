@@ -1,0 +1,4 @@
+{
+    "name": "BlueHour.PlayModeTests",
+    "optionalUnityReferences": ["TestAssemblies"]
+}

@@ -1,0 +1,6 @@
+{
+    "name": "BlueHour",
+    "rootNamespace": "BlueHour",
+    "references": ["BlueHour.Core"],
+    "noEngineReferences": true
+}
