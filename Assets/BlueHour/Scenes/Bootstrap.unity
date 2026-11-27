@@ -381,6 +381,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 103273394}
   m_Mesh: {fileID: 4300000, guid: 338182ee11cae674290c14ec6c9edfc8, type: 2}
+--- !u!1 &146721399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 146721400}
+  m_Layer: 0
+  m_Name: OpenWater spawn site
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &146721400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146721399}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4, y: -20, z: 63}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2080408272}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &158484694
 GameObject:
   m_ObjectHideFlags: 0
@@ -3215,6 +3246,7 @@ MonoBehaviour:
   speed: 4
   degreesPerPixel: 0.12
   boundaryFadeDistance: 10
+  verticalBoundaryFadeDistance: 5
   swimBounds:
     m_Center: {x: 0, y: -75, z: 0}
     m_Extent: {x: 250, y: 75, z: 250}
@@ -3372,6 +3404,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 994824263}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1006354271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1006354272}
+  m_Layer: 0
+  m_Name: Seagrass spawn site
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1006354272
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006354271}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 108, y: -17, z: -39}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2080408272}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1130389432
 GameObject:
   m_ObjectHideFlags: 0
@@ -4569,6 +4632,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1366854578}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1478859437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1478859438}
+  m_Layer: 0
+  m_Name: SandySeabed spawn site
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1478859438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478859437}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -118, y: -32.459213, z: -21}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2080408272}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1510589824
 GameObject:
   m_ObjectHideFlags: 0
@@ -5647,6 +5741,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1777846137}
   m_Mesh: {fileID: 4300000, guid: 46b9ec539f523234fb706a44a7a60e45, type: 2}
+--- !u!1 &1782381671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1782381672}
+  m_Layer: 0
+  m_Name: Prototype schooling event
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1782381672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782381671}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 26, y: -19, z: 96}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2080408272}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1817185979
 GameObject:
   m_ObjectHideFlags: 0
@@ -6720,6 +6845,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2080408272}
   - component: {fileID: 2080408271}
+  - component: {fileID: 2080408273}
   m_Layer: 0
   m_Name: Representative reef population
   m_TagString: Untagged
@@ -6743,26 +6869,48 @@ MonoBehaviour:
   - species: {fileID: 11400000, guid: 0399fbd38a2d5064d9fa17cee43f1161, type: 2}
     anchor: {fileID: 722290086}
     count: 1
+    startActive: 1
   - species: {fileID: 11400000, guid: 8efc6f3e18348a04aa9d68f4b1a2828f, type: 2}
     anchor: {fileID: 1836466136}
     count: 1
+    startActive: 1
   - species: {fileID: 11400000, guid: 7838d1c5f9bdcd54fadee954e38fab80, type: 2}
     anchor: {fileID: 362338649}
     count: 12
+    startActive: 1
   - species: {fileID: 11400000, guid: 25148617e8d4dc34eba07de60604357f, type: 2}
     anchor: {fileID: 1630409501}
     count: 1
+    startActive: 1
   - species: {fileID: 11400000, guid: d4360ede9dfc8cd4fa9802e4454b5916, type: 2}
     anchor: {fileID: 225012359}
     count: 1
+    startActive: 1
+  - species: {fileID: 11400000, guid: 25148617e8d4dc34eba07de60604357f, type: 2}
+    anchor: {fileID: 1478859438}
+    count: 1
+    startActive: 0
+  - species: {fileID: 11400000, guid: 7838d1c5f9bdcd54fadee954e38fab80, type: 2}
+    anchor: {fileID: 1006354272}
+    count: 8
+    startActive: 0
+  - species: {fileID: 11400000, guid: 7838d1c5f9bdcd54fadee954e38fab80, type: 2}
+    anchor: {fileID: 146721400}
+    count: 8
+    startActive: 0
+  - species: {fileID: 11400000, guid: 7838d1c5f9bdcd54fadee954e38fab80, type: 2}
+    anchor: {fileID: 1782381672}
+    count: 14
+    startActive: 0
   observer: {fileID: 977858025}
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 4294967291
   swimBounds:
-    m_Center: {x: 0, y: -12.65, z: 0}
-    m_Extent: {x: 45, y: 11.75, z: 45}
+    m_Center: {x: 0, y: -75, z: 0}
+    m_Extent: {x: 250, y: 75, z: 250}
   seed: 625
+  activeCap: 32
 --- !u!4 &2080408272
 Transform:
   m_ObjectHideFlags: 0
@@ -6781,8 +6929,75 @@ Transform:
   - {fileID: 362338649}
   - {fileID: 1630409501}
   - {fileID: 225012359}
+  - {fileID: 1478859438}
+  - {fileID: 1006354272}
+  - {fileID: 146721400}
+  - {fileID: 1782381672}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2080408273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080408270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115eb950d3105724ebec43d3b531d202, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BlueHour.Creatures::BlueHour.Creatures.ReefPopulationDirector
+  environment: {fileID: 1822911656}
+  observer: {fileID: 330585545}
+  sites:
+  - groupIndex: 5
+    anchor: {fileID: 1478859438}
+    profile:
+      habitat: 1
+      depthRangeM: {x: 10, y: 60}
+      localHours: {x: 0, y: 24}
+      seasons: 15
+      maxCloudCover: 1
+      weight: 0.8
+    isSchoolEvent: 0
+  - groupIndex: 6
+    anchor: {fileID: 1006354272}
+    profile:
+      habitat: 5
+      depthRangeM: {x: 6, y: 35}
+      localHours: {x: 0, y: 24}
+      seasons: 15
+      maxCloudCover: 1
+      weight: 1.1
+    isSchoolEvent: 0
+  - groupIndex: 7
+    anchor: {fileID: 146721400}
+    profile:
+      habitat: 3
+      depthRangeM: {x: 8, y: 45}
+      localHours: {x: 0, y: 24}
+      seasons: 15
+      maxCloudCover: 1
+      weight: 0.65
+    isSchoolEvent: 0
+  - groupIndex: 8
+    anchor: {fileID: 1782381672}
+    profile:
+      habitat: 3
+      depthRangeM: {x: 10, y: 40}
+      localHours: {x: 5, y: 20}
+      seasons: 11
+      maxCloudCover: 0.75
+      weight: 1
+    isSchoolEvent: 1
+  interval: 2.5
+  activationDistance: 50
+  returnDistance: 75
+  minimumSpawnDistance: 6
+  eventDuration: 38
+  eventCooldown: 75
+  eventChance: 0.18
+  seed: 173
 --- !u!1 &2115235647
 GameObject:
   m_ObjectHideFlags: 0
