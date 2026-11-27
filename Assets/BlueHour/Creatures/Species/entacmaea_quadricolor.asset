@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5999d7feb93bd77448b5321eb0a53263, type: 3}
+  m_Name: entacmaea_quadricolor
+  m_EditorClassIdentifier: BlueHour.Creatures::BlueHour.Creatures.SpeciesDefinition
+  speciesId: entacmaea_quadricolor
+  koreanName: "\uBC84\uBE14\uD301 \uB9D0\uBBF8\uC798"
+  englishName: Bubble-tip anemone
+  scientificName: Entacmaea quadricolor
+  locomotion: 0
+  approachResponse: 0
+  hostSpeciesId:
+  speed: 0
+  approachDistance: 0
+  prototype: {fileID: 1605495196751445698, guid: eb426e60672fc8e45a6320a2435cca4a, type: 3}
+  sources:
+  - title: Great Barrier Reef mid-shelf field survey
+    url: https://researchonline.jcu.edu.au/41716/
+    supportedClaim: Host anemone observed in the Great Barrier Reef.

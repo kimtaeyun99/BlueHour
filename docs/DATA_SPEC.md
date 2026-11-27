@@ -23,4 +23,16 @@
 위 예시는 형식 설명용이며 실제 종 데이터 아님. 메모는 noteId/speciesId/text/createdAt/updatedAt/photoIds, 사진은 photoId/path/capturedAt/regionId/depthM/speciesIds/favorite, 체험은 regionId/position/rotation/mode/environmentSettings. 파일 경로 탈출 방지, 유효 위치 검사, 중복 ID 제거 정책, 미래 schemaVersion은 무단 덮어쓰기 금지. 사용자 메모는 번역하지 않는다.
 
 ## 종 구성 및 검증
-어류12/상어·가오리4/포유류2/파충류2/기타 무척추4/산호4/해초·조류2. 실제 종과 대표 5종은 미확정. 공생 후보(흰동가리-말미잘, 청소놀래기-대형 어류, 망둑어-딱총새우)는 실제 분포 및 에셋 검증 후 선정. 자연 이벤트 후보(고래 이동, 대형 군집, 가오리, 산호 산란, 발광, 거북 수면 이동)도 동일. 자료 출처 후보는 GBRMPA, AIMS, WoRMS, FishBase, IUCN 등이며 실제 자료 조사 및 라이선스 검증은 미수행.
+어류12/상어·가오리4/포유류2/파충류2/기타 무척추4/산호4/해초·조류2. M2 대표 5종과 한글 표시명은 아래 표에 확정했다. 전체 30종 목록은 미확정이다. 공생 후보(흰동가리-말미잘, 청소놀래기-대형 어류, 망둑어-딱총새우)는 실제 분포 및 에셋 검증 후 선정. 자연 이벤트 후보(고래 이동, 대형 군집, 가오리, 산호 산란, 발광, 거북 수면 이동)도 동일. 자료 출처 후보는 GBRMPA, AIMS, WoRMS, FishBase, IUCN 등이며 M2 대상의 확인 항목은 아래에 기록한다. 외부 아트·음향 에셋과 라이선스는 도입 시 별도 검증한다.
+
+### M2 대표 5종
+
+한글 표기는 프로젝트 표시명이다. 검증 상태는 그레이트 배리어 리프 분포와 아래 행동의 문헌 근거에 한한다. 접근 거리·속도·무리 크기는 테스트 씬용 설정값이다. 프리팹은 Unity 기본 메시와 프로젝트에서 제작한 재질을 사용한 임시 모델이며, 외부 사진·모델·음원은 포함하지 않았다.
+
+| ID | 한글 표시명 · 학명 | 확인한 근거와 구현 범위 |
+|---|---|---|
+| amphiprion_melanopus | 시나몬 흰동가리 · *Amphiprion melanopus* | 해역 관찰과 숙주 관계 확인. 숙주 주변 유영 및 재접근을 검증한다. [현장 조사](https://researchonline.jcu.edu.au/41716/) · [숙주 선택 연구](https://researchonline.jcu.edu.au/27376/) |
+| entacmaea_quadricolor | 버블팁 말미잘 · *Entacmaea quadricolor* | 해역 관찰과 숙주 관계 확인. 시나몬 흰동가리의 고정형 숙주로 배치한다. [현장 조사](https://researchonline.jcu.edu.au/41716/) |
+| chromis_viridis | 그린 크로미스 · *Chromis viridis* | 산호 연관 군집 유영 확인. 분리·정렬·응집을 검증한다. [리저드섬 군집 유영 연구](https://pmc.ncbi.nlm.nih.gov/articles/PMC6215405/) |
+| taeniura_lymma | 파란점가오리 · *Taeniura lymma* | 리저드섬 기록과 모래·암초 연관 서식 확인. 해저 인접 유영·휴식과 접근 회피를 검증한다. [호주박물관 현장 기록](https://lifg.australian.museum/Group.html?groupId=prUGMQjZ&hierarchyId=qBHH2Q3E) · [해양공원청 자료](https://elibrary.gbrmpa.gov.au/bitstreams/a470cd33-3085-4cde-abca-d5c0612ab40d/download) |
+| acropora_millepora | 밀레포라 가지산호 · *Acropora millepora* | 케펠 제도 분포와 가지형 돌산호 확인. 고정형 표시를 검증한다. [AIMS 현장 연구](https://www.aims.gov.au/information-centre/news-and-stories/bleaching-can-hamper-reproduction-and-recovery-corals) |
