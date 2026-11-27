@@ -1,6 +1,6 @@
 {
     "name": "BlueHour.EditModeTests",
-    "references": ["BlueHour.Core", "BlueHour"],
+    "references": ["BlueHour.Creatures", "BlueHour.Core", "BlueHour"],
     "includePlatforms": ["Editor"],
     "optionalUnityReferences": ["TestAssemblies"]
 }

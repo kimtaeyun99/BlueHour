@@ -1,0 +1,5 @@
+{
+    "name": "BlueHour.Creatures",
+    "rootNamespace": "BlueHour.Creatures",
+    "references": ["BlueHour.Core"]
+}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5999d7feb93bd77448b5321eb0a53263, type: 3}
+  m_Name: chromis_viridis
+  m_EditorClassIdentifier: BlueHour.Creatures::BlueHour.Creatures.SpeciesDefinition
+  speciesId: chromis_viridis
+  koreanName: "\uADF8\uB9B0 \uD06C\uB85C\uBBF8\uC2A4"
+  englishName: Blue-green chromis
+  scientificName: Chromis viridis
+  locomotion: 2
+  approachResponse: 2
+  hostSpeciesId:
+  speed: 1.35
+  approachDistance: 2.1
+  prototype: {fileID: 8504754031824176107, guid: f298378713321a940a8471972c9c9839, type: 3}
+  sources:
+  - title: Role of water flow regime in the swimming behaviour and escape performance
+      of a schooling fish
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6215405/
+    supportedClaim: Coral-associated schooling species studied on the Great Barrier
+      Reef.

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5999d7feb93bd77448b5321eb0a53263, type: 3}
+  m_Name: taeniura_lymma
+  m_EditorClassIdentifier: BlueHour.Creatures::BlueHour.Creatures.SpeciesDefinition
+  speciesId: taeniura_lymma
+  koreanName: "\uD30C\uB780\uC810\uAC00\uC624\uB9AC"
+  englishName: Bluespotted fantail ray
+  scientificName: Taeniura lymma
+  locomotion: 3
+  approachResponse: 2
+  hostSpeciesId:
+  speed: 0.95
+  approachDistance: 2.4
+  prototype: {fileID: 3876395713845879455, guid: 72f80eeceaa784d48888021fd3d4f2d2, type: 3}
+  sources:
+  - title: Australian Museum Lizard Island Field Guide
+    url: https://lifg.australian.museum/Group.html?groupId=prUGMQjZ&hierarchyId=qBHH2Q3E
+    supportedClaim: Species documented in the Lizard Island area.
+  - title: Great Barrier Reef Marine Park Authority monitoring resource
+    url: https://elibrary.gbrmpa.gov.au/bitstreams/a470cd33-3085-4cde-abca-d5c0612ab40d/download
+    supportedClaim: Shows reef and sand-associated ecology.

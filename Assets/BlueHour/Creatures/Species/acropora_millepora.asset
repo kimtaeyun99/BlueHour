@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5999d7feb93bd77448b5321eb0a53263, type: 3}
+  m_Name: acropora_millepora
+  m_EditorClassIdentifier: BlueHour.Creatures::BlueHour.Creatures.SpeciesDefinition
+  speciesId: acropora_millepora
+  koreanName: "\uBC00\uB808\uD3EC\uB77C \uAC00\uC9C0\uC0B0\uD638"
+  englishName: Millepora branching coral
+  scientificName: Acropora millepora
+  locomotion: 0
+  approachResponse: 0
+  hostSpeciesId:
+  speed: 0
+  approachDistance: 0
+  prototype: {fileID: 8439828365727886555, guid: 12e51fcdb2b53484889db42901256081, type: 3}
+  sources:
+  - title: 'Australian Institute of Marine Science: Keppel Islands branching coral
+      field research'
+    url: https://www.aims.gov.au/information-centre/news-and-stories/bleaching-can-hamper-reproduction-and-recovery-corals
+    supportedClaim: Branching stony coral documented in the Great Barrier Reef.
