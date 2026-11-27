@@ -169,3 +169,6 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# TerrainData retains its native Unity binary serialization.
+Assets/BlueHour/World/GreatBarrierReef/Seabed.asset binary -unity-yaml !eol !linguist-language

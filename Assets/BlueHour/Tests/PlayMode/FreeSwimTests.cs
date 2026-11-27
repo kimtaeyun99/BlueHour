@@ -45,13 +45,13 @@ namespace BlueHour.Tests
             motor.Swim(Vector2.zero, -1f, Vector2.zero, 2f);
             Assert.That(motor.transform.position.y, Is.InRange(-24.75f, -24.35f));
 
-            motor.transform.position = new Vector3(49f, -5f, -19f);
+            motor.transform.position = new Vector3(249f, -5f, -19f);
             Physics.SyncTransforms();
             motor.Swim(Vector2.right, 0f, Vector2.zero, 0.5f);
-            Assert.That(motor.transform.position.x, Is.InRange(49.35f, 49.45f));
+            Assert.That(motor.transform.position.x, Is.InRange(249.15f, 249.25f));
             motor.Swim(Vector2.right, 1f, Vector2.zero, 30f);
-            Assert.That(motor.transform.position.x, Is.LessThanOrEqualTo(50.001f));
-            Assert.That(motor.transform.position.y, Is.InRange(-0.31f, -0.299f));
+            Assert.That(motor.transform.position.x, Is.LessThanOrEqualTo(250.001f));
+            Assert.That(motor.transform.position.y, Is.InRange(-0.01f, 0.001f));
 
             var prior = motor.transform.position;
             motor.Swim(Vector2.left, -1f, Vector2.zero, 0.25f);

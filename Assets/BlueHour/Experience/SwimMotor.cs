@@ -9,6 +9,7 @@ namespace BlueHour.Experience
         [SerializeField, Min(0f)] private float speed = 4f;
         [SerializeField, Min(0f)] private float degreesPerPixel = 0.12f;
         [SerializeField, Min(0.01f)] private float boundaryFadeDistance = 5f;
+        [SerializeField, Min(0.01f)] private float verticalBoundaryFadeDistance = 5f;
         [SerializeField] private Bounds swimBounds =
             new Bounds(new Vector3(0f, -25f, 0f), new Vector3(100f, 50f, 100f));
 
@@ -35,16 +36,16 @@ namespace BlueHour.Experience
             var min = swimBounds.min;
             var max = swimBounds.max;
 
-            displacement.x = LimitAxis(position.x, displacement.x, min.x, max.x);
-            displacement.y = LimitAxis(position.y, displacement.y, min.y, max.y);
-            displacement.z = LimitAxis(position.z, displacement.z, min.z, max.z);
+            displacement.x = LimitAxis(position.x, displacement.x, min.x, max.x, boundaryFadeDistance);
+            displacement.y = LimitAxis(position.y, displacement.y, min.y, max.y, verticalBoundaryFadeDistance);
+            displacement.z = LimitAxis(position.z, displacement.z, min.z, max.z, boundaryFadeDistance);
             controller.Move(displacement);
         }
 
-        private float LimitAxis(float position, float displacement, float min, float max)
+        private static float LimitAxis(float position, float displacement, float min, float max, float fadeDistance)
         {
             var distance = Mathf.Max(0f, displacement < 0f ? position - min : max - position);
-            var speedScale = Mathf.Clamp01(distance / boundaryFadeDistance);
+            var speedScale = Mathf.Clamp01(distance / fadeDistance);
             return Mathf.Sign(displacement) * Mathf.Min(Mathf.Abs(displacement) * speedScale, distance);
         }
     }
