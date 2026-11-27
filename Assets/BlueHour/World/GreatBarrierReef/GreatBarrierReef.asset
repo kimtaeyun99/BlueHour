@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bea8e7696ded43439c198d3c2b4aa0b, type: 3}
+  m_Name: GreatBarrierReef
+  m_EditorClassIdentifier: BlueHour.World::BlueHour.World.RegionDefinition
+  regionId: gbr
+  koreanName: "\uADF8\uB808\uC774\uD2B8 \uBC30\uB9AC\uC5B4 \uB9AC\uD504"
+  englishName: Great Barrier Reef
+  swimBounds:
+    m_Center: {x: 0, y: -75, z: 0}
+    m_Extent: {x: 250, y: 75, z: 250}
+  utcOffsetMinutes: 600
+  habitats:
+  - type: 0
+    id: coral_reef
+    koreanName: "\uC0B0\uD638\uCD08"
+    englishName: Coral reef
+    min: {x: -90, y: -250}
+    max: {x: 85, y: 45}
+    currentExposure: 0.68
+    lightExposure: 1
+  - type: 1
+    id: sand
+    koreanName: "\uBAA8\uB798 \uD574\uC800"
+    englishName: Sandy seabed
+    min: {x: -250, y: -250}
+    max: {x: -90, y: 45}
+    currentExposure: 0.67
+    lightExposure: 0.97
+  - type: 2
+    id: rocky_cliff
+    koreanName: "\uC554\uBCBD"
+    englishName: Rocky cliff
+    min: {x: -250, y: 45}
+    max: {x: -90, y: 250}
+    currentExposure: 0.89
+    lightExposure: 0.84
+  - type: 3
+    id: open_water
+    koreanName: "\uAC1C\uBC29 \uC218\uC5ED"
+    englishName: Open water
+    min: {x: -90, y: 45}
+    max: {x: 85, y: 250}
+    currentExposure: 1
+    lightExposure: 1
+  - type: 4
+    id: underwater_cave
+    koreanName: "\uC218\uC911 \uB3D9\uAD74"
+    englishName: Underwater cave
+    min: {x: 85, y: 45}
+    max: {x: 250, y: 250}
+    currentExposure: 0.35
+    lightExposure: 0.7
+  - type: 5
+    id: seagrass
+    koreanName: "\uD574\uCD08 \uAD70\uB77D"
+    englishName: Seagrass meadow
+    min: {x: 85, y: -250}
+    max: {x: 250, y: 45}
+    currentExposure: 0.51
+    lightExposure: 0.94

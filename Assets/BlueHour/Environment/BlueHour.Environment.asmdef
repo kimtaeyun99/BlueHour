@@ -1,0 +1,5 @@
+{
+    "name": "BlueHour.Environment",
+    "rootNamespace": "BlueHour.Environment",
+    "references": ["BlueHour.World", "Unity.InputSystem"]
+}
