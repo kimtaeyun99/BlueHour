@@ -1049,6 +1049,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b30ef2d9e8b31ba4d820d41bb4448644, type: 3}
   m_Name:
   m_EditorClassIdentifier: BlueHour.Creatures::BlueHour.Creatures.CreatureView
+  animatedParts:
+  - {fileID: 7056703580925652461}
+  - {fileID: 4105356015051786859}
 --- !u!1 &6717442422724052967
 GameObject:
   m_ObjectHideFlags: 0

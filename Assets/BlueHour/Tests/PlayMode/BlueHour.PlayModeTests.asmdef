@@ -1,5 +1,5 @@
 {
     "name": "BlueHour.PlayModeTests",
-    "references": ["BlueHour.World", "BlueHour.Environment", "BlueHour.Creatures", "BlueHour.Experience"],
+    "references": ["BlueHour.Presentation", "BlueHour.World", "BlueHour.Environment", "BlueHour.Creatures", "BlueHour.Experience"],
     "optionalUnityReferences": ["TestAssemblies"]
 }
