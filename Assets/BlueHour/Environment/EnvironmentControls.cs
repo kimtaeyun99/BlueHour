@@ -87,10 +87,13 @@ namespace BlueHour.Environment
             if (!visible || DisplaySuppressed || SessionHudHidden)
                 return;
             var previous = GUI.skin.font;
+            var matrix = GUI.matrix;
+            GUI.matrix = matrix * Matrix4x4.Scale(new Vector3(ReefLanguage.UiScale, ReefLanguage.UiScale, 1f));
             if (font != null)
                 GUI.skin.font = font;
             GUI.Box(new Rect(20f, 20f, 400f, 190f), readout);
             GUI.skin.font = previous;
+            GUI.matrix = matrix;
         }
 
         private void OnDestroy()

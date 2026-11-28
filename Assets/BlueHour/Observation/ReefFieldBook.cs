@@ -186,6 +186,11 @@ namespace BlueHour.Observation
             if (capturing)
                 return;
 
+            var matrix = GUI.matrix;
+            var scale = ReefLanguage.UiScale;
+            var viewportWidth = Screen.width / scale;
+            var viewportHeight = Screen.height / scale;
+            GUI.matrix = matrix * Matrix4x4.Scale(new Vector3(scale, scale, 1f));
             var previousFont = GUI.skin.font;
             if (panelFont != null)
                 GUI.skin.font = panelFont;
@@ -193,25 +198,26 @@ namespace BlueHour.Observation
             try
             {
                 if (photoMode)
-                    GUI.Box(new Rect(18f, Screen.height - 65f, 390f, 45f),
+                    GUI.Box(new Rect(18f, viewportHeight - 65f, 390f, 45f),
                         ReefLanguage.Text("Photo · wheel to zoom · Enter to capture · Esc") + (status == null ? "" : "\n" + status));
                 else if (page != Page.Closed)
-                    DrawPanel();
+                    DrawPanel(viewportWidth, viewportHeight);
                 else if (!FocusHudHidden && !SessionPanelOpen && observations.FocusSpecies != null)
-                    GUI.Box(new Rect(18f, Screen.height - 60f, 280f, 38f),
+                    GUI.Box(new Rect(18f, viewportHeight - 60f, 280f, 38f),
                         observations.FocusSpecies.KoreanName + "  ·  B: field guide");
             }
             finally
             {
                 GUI.skin.font = previousFont;
+                GUI.matrix = matrix;
             }
         }
 
-        private void DrawPanel()
+        private void DrawPanel(float viewportWidth, float viewportHeight)
         {
-            var width = Mathf.Min(780f, Screen.width - 32f);
-            var height = Mathf.Min(680f, Screen.height - 32f);
-            GUILayout.BeginArea(new Rect((Screen.width - width) * 0.5f, 16f, width, height), GUI.skin.box);
+            var width = Mathf.Min(780f, viewportWidth - 32f);
+            var height = Mathf.Min(680f, viewportHeight - 32f);
+            GUILayout.BeginArea(new Rect((viewportWidth - width) * 0.5f, 16f, width, height), GUI.skin.box);
             GUILayout.BeginHorizontal();
             if (GUILayout.Toggle(page == Page.Guide, ReefLanguage.Text("Field guide"), GUI.skin.button))
                 SetPage(Page.Guide);
@@ -246,7 +252,7 @@ namespace BlueHour.Observation
 
         private void SpeciesButtons()
         {
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginVertical();
             for (var index = 0; index < observations.Catalog.Count; index++)
             {
                 var label = ReefLanguage.IsKorean ? observations.Catalog[index].KoreanName : observations.Catalog[index].EnglishName;
@@ -258,7 +264,7 @@ namespace BlueHour.Observation
                         ClearNote();
                 }
             }
-            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
         }
 
         private void DrawGuide(SpeciesDefinition species)
