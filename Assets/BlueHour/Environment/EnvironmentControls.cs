@@ -1,3 +1,4 @@
+using BlueHour.Localization;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,12 +16,14 @@ namespace BlueHour.Environment
         private bool visible;
         private float refreshAt;
         private string readout;
+        private Font font;
         public bool DisplaySuppressed { get; set; }
         public bool SessionHudHidden { get; set; }
 
         private void Awake()
         {
             environment = GetComponent<ReefEnvironment>();
+            font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Arial" }, 14);
         }
 
         private void Update()
@@ -66,23 +69,34 @@ namespace BlueHour.Environment
 
             refreshAt = Time.unscaledTime + 0.25f;
             var sample = environment.ViewerSnapshot;
-            var zone = sample.Habitat?.EnglishName ?? "Outside region";
-            var clockMode = environment.TimeMode == ClockMode.Accelerated ? "60x" : environment.TimeMode.ToString();
+            var zone = (ReefLanguage.IsKorean ? sample.Habitat?.KoreanName : sample.Habitat?.EnglishName) ?? ReefLanguage.Text("Outside region");
+            var clockMode = environment.TimeMode == ClockMode.Accelerated ? "60x" : ReefLanguage.Text(environment.TimeMode.ToString());
             var seasonMode = environment.SeasonOverride.HasValue ? "manual" : "local";
             var weatherMode = environment.WeatherOverride.HasValue ? "manual" : "simulated";
-            readout = $"{zone}   |   {sample.DepthM:F1} m depth\n"
-                + $"Queensland {sample.LocalTime:dd MMM HH:mm} ({clockMode})\n"
-                + $"{sample.Season} ({seasonMode})  /  {sample.Weather} ({weatherMode})\n"
-                + $"{sample.TemperatureC:F1} °C  |  Salinity {sample.PracticalSalinity:F2}\n"
-                + $"{sample.AbsolutePressurePa / 1000f:F0} kPa absolute  |  Light {sample.LightFactor:P0}\n"
-                + $"Current X {sample.CurrentMps.x:+0.00;-0.00;0.00}, Z {sample.CurrentMps.z:+0.00;-0.00;0.00} m/s\n\n"
-                + "F1 Close  ·  F2 Clock  ·  F3 Fixed hour\nF4 Season  ·  F5 Weather";
+            readout = $"{zone}   |   {sample.DepthM:F1} m {ReefLanguage.Text("depth")}\n"
+                + $"{ReefLanguage.Text("Queensland")} {sample.LocalTime:dd MMM HH:mm} ({clockMode})\n"
+                + $"{ReefLanguage.Text(sample.Season.ToString())} ({ReefLanguage.Text(seasonMode)})  /  {ReefLanguage.Text(sample.Weather.ToString())} ({ReefLanguage.Text(weatherMode)})\n"
+                + $"{sample.TemperatureC:F1} °C  |  {ReefLanguage.Text("Salinity")} {sample.PracticalSalinity:F2}\n"
+                + $"{sample.AbsolutePressurePa / 1000f:F0} kPa {ReefLanguage.Text("absolute")}  |  {ReefLanguage.Text("Light")} {sample.LightFactor:P0}\n"
+                + $"{ReefLanguage.Text("Current")} X {sample.CurrentMps.x:+0.00;-0.00;0.00}, Z {sample.CurrentMps.z:+0.00;-0.00;0.00} m/s\n\n"
+                + ReefLanguage.Text("F1 Close  ·  F2 Clock  ·  F3 Fixed hour") + "\n" + ReefLanguage.Text("F4 Season  ·  F5 Weather");
         }
 
         private void OnGUI()
         {
-            if (visible && !DisplaySuppressed && !SessionHudHidden)
-                GUI.Box(new Rect(20f, 20f, 368f, 181f), readout);
+            if (!visible || DisplaySuppressed || SessionHudHidden)
+                return;
+            var previous = GUI.skin.font;
+            if (font != null)
+                GUI.skin.font = font;
+            GUI.Box(new Rect(20f, 20f, 400f, 190f), readout);
+            GUI.skin.font = previous;
+        }
+
+        private void OnDestroy()
+        {
+            if (font != null)
+                Destroy(font);
         }
     }
 }

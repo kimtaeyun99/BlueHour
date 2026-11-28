@@ -1,3 +1,4 @@
+using BlueHour.Localization;
 using System;
 using System.Collections;
 using System.IO;
@@ -166,7 +167,7 @@ namespace BlueHour.Observation
                 screen = ScreenCapture.CaptureScreenshotAsTexture();
                 var png = screen != null ? screen.EncodeToPNG() : null;
                 observations.Records.SavePhoto(png, environment.Region.RegionId, state.DepthM, species);
-                status = "Photo saved.";
+                status = ReefLanguage.Text("Photo saved.");
             }
             catch (Exception exception) when (IsRecordError(exception))
             {
@@ -193,7 +194,7 @@ namespace BlueHour.Observation
             {
                 if (photoMode)
                     GUI.Box(new Rect(18f, Screen.height - 65f, 390f, 45f),
-                        "Photo · wheel to zoom · Enter to capture · Esc" + (status == null ? "" : "\n" + status));
+                        ReefLanguage.Text("Photo · wheel to zoom · Enter to capture · Esc") + (status == null ? "" : "\n" + status));
                 else if (page != Page.Closed)
                     DrawPanel();
                 else if (!FocusHudHidden && !SessionPanelOpen && observations.FocusSpecies != null)
@@ -212,13 +213,13 @@ namespace BlueHour.Observation
             var height = Mathf.Min(680f, Screen.height - 32f);
             GUILayout.BeginArea(new Rect((Screen.width - width) * 0.5f, 16f, width, height), GUI.skin.box);
             GUILayout.BeginHorizontal();
-            if (GUILayout.Toggle(page == Page.Guide, "Field guide", GUI.skin.button))
+            if (GUILayout.Toggle(page == Page.Guide, ReefLanguage.Text("Field guide"), GUI.skin.button))
                 SetPage(Page.Guide);
-            if (GUILayout.Toggle(page == Page.Journal, "Journal", GUI.skin.button))
+            if (GUILayout.Toggle(page == Page.Journal, ReefLanguage.Text("Journal"), GUI.skin.button))
                 SetPage(Page.Journal);
-            if (GUILayout.Toggle(page == Page.Album, "Album", GUI.skin.button))
+            if (GUILayout.Toggle(page == Page.Album, ReefLanguage.Text("Album"), GUI.skin.button))
                 SetPage(Page.Album);
-            var close = GUILayout.Button("Close", GUILayout.Width(80f));
+            var close = GUILayout.Button(ReefLanguage.Text("Close"), GUILayout.Width(80f));
             GUILayout.EndHorizontal();
             if (close)
             {
@@ -248,7 +249,7 @@ namespace BlueHour.Observation
             GUILayout.BeginHorizontal();
             for (var index = 0; index < observations.Catalog.Count; index++)
             {
-                var label = observations.Catalog[index].KoreanName;
+                var label = ReefLanguage.IsKorean ? observations.Catalog[index].KoreanName : observations.Catalog[index].EnglishName;
                 if (GUILayout.Toggle(speciesIndex == index, label, GUI.skin.button) && speciesIndex != index)
                 {
                     speciesIndex = index;
@@ -267,10 +268,10 @@ namespace BlueHour.Observation
                 return;
 
             GUILayout.Label($"{species.KoreanName} · {species.EnglishName}\n{species.ScientificName}");
-            GUILayout.Label(species.Sources[0].SupportedClaim);
+            GUILayout.Label(ReefLanguage.Describe(species.SpeciesId, species.Sources[0].SupportedClaim));
             var found = FirstObservation(species.SpeciesId);
-            GUILayout.Label(found == null ? "Not observed yet" : FormatObservation(found));
-            details = GUILayout.Toggle(details, "Show evidence and behavior");
+            GUILayout.Label(found == null ? ReefLanguage.Text("Not observed yet") : FormatObservation(found));
+            details = GUILayout.Toggle(details, ReefLanguage.Text("Show evidence and behavior"));
             if (!details)
                 return;
             GUILayout.Label($"Behavior: {species.Locomotion}    Response: {species.Response}");
@@ -288,7 +289,7 @@ namespace BlueHour.Observation
                 return;
 
             var found = FirstObservation(species.SpeciesId);
-            GUILayout.Label(found == null ? "No first observation" : FormatObservation(found));
+            GUILayout.Label(found == null ? ReefLanguage.Text("No first observation") : FormatObservation(found));
             foreach (var note in observations.Records.Notes)
             {
                 if (note.speciesId != species.SpeciesId)
@@ -302,9 +303,9 @@ namespace BlueHour.Observation
                     linkedPhoto = note.photoIds != null && note.photoIds.Length > 0 ? note.photoIds[0] : null;
                     pendingDelete = null;
                 }
-                if (GUILayout.Button(pendingDelete == note.noteId ? "Confirm" : "Delete", GUILayout.Width(85f)))
+                if (GUILayout.Button(pendingDelete == note.noteId ? ReefLanguage.Text("Confirm") : ReefLanguage.Text("Delete"), GUILayout.Width(85f)))
                 {
-                    if (pendingDelete == note.noteId && TryRecord(() => observations.Records.DeleteNote(note.noteId), "Note deleted."))
+                    if (pendingDelete == note.noteId && TryRecord(() => observations.Records.DeleteNote(note.noteId), ReefLanguage.Text("Note deleted.")))
                     {
                         if (noteId == note.noteId)
                             ClearNote();
@@ -316,28 +317,28 @@ namespace BlueHour.Observation
                 GUILayout.EndHorizontal();
             }
 
-            GUILayout.Label(noteId == null ? "New note" : "Edit note");
+            GUILayout.Label(noteId == null ? ReefLanguage.Text("New note") : ReefLanguage.Text("Edit note"));
             noteText = GUILayout.TextArea(noteText, 2000, GUILayout.MinHeight(95f));
-            if (GUILayout.Button(linkedPhoto == null ? "Attach a photo" : "Change or remove photo"))
+            if (GUILayout.Button(linkedPhoto == null ? ReefLanguage.Text("Attach a photo") : ReefLanguage.Text("Change or remove photo")))
                 linkedPhoto = NextPhotoLink(linkedPhoto);
             if (linkedPhoto != null)
             {
                 var photo = FindPhoto(linkedPhoto);
-                GUILayout.Label(photo == null ? "Photo unavailable" : "Linked photo · " + ShortDate(photo.capturedAt));
+                GUILayout.Label(photo == null ? ReefLanguage.Text("Photo unavailable") : "Linked photo · " + ShortDate(photo.capturedAt));
             }
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Save note") && TryRecord(
-                () => observations.Records.SaveNote(noteId, species.SpeciesId, noteText, linkedPhoto), "Note saved."))
+            if (GUILayout.Button(ReefLanguage.Text("Save note")) && TryRecord(
+                () => observations.Records.SaveNote(noteId, species.SpeciesId, noteText, linkedPhoto), ReefLanguage.Text("Note saved.")))
                 ClearNote();
-            if (GUILayout.Button("Clear"))
+            if (GUILayout.Button(ReefLanguage.Text("Clear note")))
                 ClearNote();
             GUILayout.EndHorizontal();
         }
 
         private void DrawAlbum(SpeciesDefinition species)
         {
-            favorites = GUILayout.Toggle(favorites, "Favorites only");
-            filterSpecies = GUILayout.Toggle(filterSpecies, "Filter by species");
+            favorites = GUILayout.Toggle(favorites, ReefLanguage.Text("Favorites only"));
+            filterSpecies = GUILayout.Toggle(filterSpecies, ReefLanguage.Text("Filter by species"));
             if (filterSpecies)
                 SpeciesButtons();
 
@@ -362,16 +363,16 @@ namespace BlueHour.Observation
                 foreach (var id in selected.speciesIds)
                     foreach (var candidate in observations.Catalog)
                         if (id == candidate.SpeciesId)
-                            GUILayout.Label(candidate.KoreanName);
+                            GUILayout.Label(ReefLanguage.IsKorean ? candidate.KoreanName : candidate.EnglishName);
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button(selected.favorite ? "Unfavorite" : "Favorite"))
+            if (GUILayout.Button(selected.favorite ? ReefLanguage.Text("Unfavorite") : ReefLanguage.Text("Favorite")))
                 TryRecord(() => observations.Records.ToggleFavorite(selected), null);
-            if (GUILayout.Button("Export PNG"))
+            if (GUILayout.Button(ReefLanguage.Text("Export PNG")))
                 TryRecord(() => status = "Exported to " + observations.Records.ExportPhoto(selected), null);
-            if (GUILayout.Button(pendingDelete == selected.photoId ? "Confirm deletion" : "Delete photo"))
+            if (GUILayout.Button(pendingDelete == selected.photoId ? ReefLanguage.Text("Confirm deletion") : ReefLanguage.Text("Delete photo")))
             {
                 if (pendingDelete == selected.photoId
-                    && TryRecord(() => observations.Records.DeletePhoto(selected), "Photo removed."))
+                    && TryRecord(() => observations.Records.DeletePhoto(selected), ReefLanguage.Text("Photo removed.")))
                     SelectPhoto(null);
                 else
                     pendingDelete = selected.photoId;

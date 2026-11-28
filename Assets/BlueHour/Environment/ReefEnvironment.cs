@@ -57,6 +57,12 @@ namespace BlueHour.Environment
             Refresh();
         }
 
+        public void RestoreFixedTime(DateTimeOffset time)
+        {
+            clock.RestoreFixedTime(time);
+            Refresh();
+        }
+
         public void AdvanceFixedHour()
         {
             clock.AdvanceFixedHours(1);

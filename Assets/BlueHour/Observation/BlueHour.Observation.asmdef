@@ -1,5 +1,5 @@
 {
     "name": "BlueHour.Observation",
     "rootNamespace": "BlueHour.Observation",
-    "references": ["BlueHour.Core", "BlueHour.Creatures", "BlueHour.Environment", "BlueHour.Experience", "BlueHour.World", "Unity.InputSystem"]
+    "references": ["BlueHour", "BlueHour.Core", "BlueHour.Creatures", "BlueHour.Environment", "BlueHour.Experience", "BlueHour.World", "Unity.InputSystem"]
 }

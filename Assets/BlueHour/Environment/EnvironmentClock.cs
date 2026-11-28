@@ -40,6 +40,12 @@ namespace BlueHour.Environment
             Mode = mode;
         }
 
+        public void RestoreFixedTime(DateTimeOffset time)
+        {
+            simulationAnchor = time.ToOffset(offset);
+            Mode = ClockMode.Fixed;
+        }
+
         public void AdvanceFixedHours(int hours)
         {
             if (Mode == ClockMode.Fixed)
