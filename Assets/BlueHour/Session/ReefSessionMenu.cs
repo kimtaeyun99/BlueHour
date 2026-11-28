@@ -188,7 +188,7 @@ namespace BlueHour.Session
                 var width = Mathf.Min(panel == Panel.Map ? 560f : 470f, viewportWidth - 26f);
                 var left = (viewportWidth - width) * 0.5f;
                 GUILayout.BeginArea(new Rect(left, 18f, width, viewportHeight - 36f), GUI.skin.box);
-                panelScroll = GUILayout.BeginScrollView(panelScroll);
+                panelScroll = GUILayout.BeginScrollView(panelScroll, false, false, GUIStyle.none, GUI.skin.verticalScrollbar);
                 switch (panel)
                 {
                     case Panel.Menu: DrawMenu(); break;
@@ -216,12 +216,12 @@ namespace BlueHour.Session
             Label("Blue Hour");
             Label(CurrentLocation());
             if (!string.IsNullOrEmpty(saveWarning)) Label(saveWarning);
-            var mode = GUILayout.SelectionGrid((int)guided.Mode, Localized(ViewingLabels), 4);
+            var mode = GUILayout.SelectionGrid((int)guided.Mode, Localized(ViewingLabels), 2);
             if ((ViewingMode)mode != guided.Mode)
                 guided.SetMode((ViewingMode)mode);
             if (guided.Mode != ViewingMode.Manual)
             {
-                Label($"Viewing speed · {guided.Speed:F1} m/s");
+                Label($"{ReefLanguage.Text("Viewing speed")} · {guided.Speed:F1} m/s");
                 guided.Speed = GUILayout.HorizontalSlider(guided.Speed, 0.6f, 4.0f);
                 var next = GUILayout.SelectionGrid(timerIndex, Localized(TimerLabels), 4);
                 if (next != timerIndex)
@@ -230,7 +230,7 @@ namespace BlueHour.Session
                     guided.SetTimer(TimerMinutes[next] * 60f);
                 }
                 if (guided.TimerRemaining > 0f)
-                    Label($"Timer · {Mathf.CeilToInt(guided.TimerRemaining)} s");
+                    Label($"{ReefLanguage.Text("Timer")} · {Mathf.CeilToInt(guided.TimerRemaining)} s");
                 if (timerIndex != 0 && guided.TimerRemaining == 0f && GUILayout.Button(ReefLanguage.Text("Restart timer")))
                     guided.SetTimer(TimerMinutes[timerIndex] * 60f);
             }
@@ -286,9 +286,9 @@ namespace BlueHour.Session
                 frameIndex = nextFrame;
                 SetFrameLimit();
             }
-            Label($"Ambience · {waterAudio.AmbienceVolume:P0}");
+            Label($"{ReefLanguage.Text("Ambience")} · {waterAudio.AmbienceVolume:P0}");
             waterAudio.SetAmbienceVolume(GUILayout.HorizontalSlider(waterAudio.AmbienceVolume, 0f, 1f));
-            Label($"Music · {waterAudio.MusicVolume:P0}");
+            Label($"{ReefLanguage.Text("Music")} · {waterAudio.MusicVolume:P0}");
             waterAudio.SetMusicVolume(GUILayout.HorizontalSlider(waterAudio.MusicVolume, 0f, 1f));
             waterAudio.SetMode((WaterAudioMode)GUILayout.SelectionGrid((int)waterAudio.Mode, Localized(SoundLabels), 2));
 
