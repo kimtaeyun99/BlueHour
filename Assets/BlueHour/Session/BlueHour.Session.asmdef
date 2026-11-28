@@ -1,0 +1,5 @@
+{
+    "name": "BlueHour.Session",
+    "rootNamespace": "BlueHour.Session",
+    "references": ["BlueHour.Creatures", "BlueHour.Environment", "BlueHour.Experience", "BlueHour.Observation", "BlueHour.Presentation", "BlueHour.World", "Unity.InputSystem"]
+}

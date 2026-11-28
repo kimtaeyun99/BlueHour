@@ -14,6 +14,7 @@ namespace BlueHour.Experience
         private InputAction release;
         private bool captured;
         private bool panelOpen;
+        public bool Guided { get; set; }
         private bool restoreCapture;
 
         private void Awake()
@@ -81,7 +82,7 @@ namespace BlueHour.Experience
             if (captured && Cursor.lockState != CursorLockMode.Locked)
                 SetCaptured(false);
 
-            if (captured)
+            if (captured && !Guided)
                 motor.Swim(move.ReadValue<Vector2>(), depth.ReadValue<float>(),
                     look.ReadValue<Vector2>(), Time.deltaTime);
         }

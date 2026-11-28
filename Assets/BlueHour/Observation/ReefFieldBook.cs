@@ -34,6 +34,13 @@ namespace BlueHour.Observation
         private string status;
         private Texture2D preview;
         private Font panelFont;
+        public bool IsBusy => page != Page.Closed || photoMode || capturing;
+        public bool SessionPanelOpen { get; set; }
+        public bool FocusHudHidden { get; set; }
+
+        public void OpenGuide() => SetPage(Page.Guide);
+        public void OpenJournal() => SetPage(Page.Journal);
+        public void OpenAlbum() => SetPage(Page.Album);
 
         private void Awake()
         {
@@ -60,7 +67,7 @@ namespace BlueHour.Observation
         private void Update()
         {
             var keyboard = Keyboard.current;
-            if (keyboard == null || !Application.isFocused || capturing)
+            if (keyboard == null || !Application.isFocused || capturing || SessionPanelOpen)
                 return;
 
             if (keyboard.escapeKey.wasPressedThisFrame)
@@ -189,7 +196,7 @@ namespace BlueHour.Observation
                         "Photo · wheel to zoom · Enter to capture · Esc" + (status == null ? "" : "\n" + status));
                 else if (page != Page.Closed)
                     DrawPanel();
-                else if (observations.FocusSpecies != null)
+                else if (!FocusHudHidden && !SessionPanelOpen && observations.FocusSpecies != null)
                     GUI.Box(new Rect(18f, Screen.height - 60f, 280f, 38f),
                         observations.FocusSpecies.KoreanName + "  ·  B: field guide");
             }

@@ -38,7 +38,17 @@ namespace BlueHour.Creatures
         private float eventExpiresAt;
         private int activeEvent = -1;
 
-        public bool HasActiveEvent => activeEvent >= 0;
+        public bool TryGetEventPosition(out Vector3 position)
+        {
+            if (activeEvent >= 0 && habitat.IsGroupActive(sites[activeEvent].groupIndex))
+            {
+                position = sites[activeEvent].anchor.position;
+                return true;
+            }
+
+            position = Vector3.zero;
+            return false;
+        }
 
         private void Start()
         {
