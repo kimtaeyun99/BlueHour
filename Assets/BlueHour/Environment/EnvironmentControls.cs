@@ -15,6 +15,7 @@ namespace BlueHour.Environment
         private bool visible;
         private float refreshAt;
         private string readout;
+        public bool DisplaySuppressed { get; set; }
 
         private void Awake()
         {
@@ -79,7 +80,7 @@ namespace BlueHour.Environment
 
         private void OnGUI()
         {
-            if (visible)
+            if (visible && !DisplaySuppressed)
                 GUI.Box(new Rect(20f, 20f, 368f, 181f), readout);
         }
     }

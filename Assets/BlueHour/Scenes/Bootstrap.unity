@@ -7359,6 +7359,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1922359010}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1925459704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1925459707}
+  - component: {fileID: 1925459706}
+  - component: {fileID: 1925459705}
+  m_Layer: 0
+  m_Name: Field guide, journal and album
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1925459705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925459704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a7b983f983f0b408c7c7ec895b180b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BlueHour.Observation::BlueHour.Observation.ReefFieldBook
+  swimmer: {fileID: 977858022}
+  environmentControls: {fileID: 1822911655}
+--- !u!114 &1925459706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925459704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92c6c98a1100f1a40b22b80c4d46121c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BlueHour.Observation::BlueHour.Observation.ReefObservations
+  viewer: {fileID: 330585545}
+  habitat: {fileID: 2080408271}
+  environment: {fileID: 1822911656}
+  catalog:
+  - {fileID: 11400000, guid: d4360ede9dfc8cd4fa9802e4454b5916, type: 2}
+  - {fileID: 11400000, guid: 0399fbd38a2d5064d9fa17cee43f1161, type: 2}
+  - {fileID: 11400000, guid: 7838d1c5f9bdcd54fadee954e38fab80, type: 2}
+  - {fileID: 11400000, guid: 8efc6f3e18348a04aa9d68f4b1a2828f, type: 2}
+  - {fileID: 11400000, guid: 25148617e8d4dc34eba07de60604357f, type: 2}
+  maxDistance: 10
+  viewingAngle: 9
+  requiredTime: 1.4
+--- !u!4 &1925459707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925459704}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1953691988
 GameObject:
   m_ObjectHideFlags: 0
@@ -13023,3 +13094,4 @@ SceneRoots:
   - {fileID: 2080408272}
   - {fileID: 1746246379}
   - {fileID: 1132632675}
+  - {fileID: 1925459707}
