@@ -62,6 +62,30 @@ namespace BlueHour.Experience
             view.localRotation = Quaternion.Euler(pitch, 0f, 0f);
         }
 
+        public float ViewPitch => pitch;
+
+        public bool TryRestorePose(Vector3 point, float yaw, float savedPitch)
+        {
+            if (!float.IsFinite(point.x) || !float.IsFinite(point.y) || !float.IsFinite(point.z)
+                || !float.IsFinite(yaw) || !float.IsFinite(savedPitch) || !swimBounds.Contains(point))
+                return false;
+
+            var half = Mathf.Max(0f, controller.height * 0.5f - controller.radius);
+            controller.enabled = false;
+            var center = point + controller.center;
+            var occupied = Physics.CheckCapsule(center - Vector3.up * half, center + Vector3.up * half,
+                Mathf.Max(0.01f, controller.radius - 0.06f), Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            if (!occupied)
+            {
+                transform.SetPositionAndRotation(point, Quaternion.Euler(0f, yaw, 0f));
+                pitch = Mathf.Clamp(savedPitch, -85f, 85f);
+                view.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+            }
+
+            controller.enabled = true;
+            return !occupied;
+        }
+
         private static float LimitAxis(float position, float displacement, float min, float max, float fadeDistance)
         {
             var distance = Mathf.Max(0f, displacement < 0f ? position - min : max - position);

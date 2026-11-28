@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using BlueHour.Localization;
 using BlueHour.Environment;
 using BlueHour.Experience;
 using BlueHour.Observation;
@@ -27,6 +30,17 @@ namespace BlueHour.Session
         private int timerIndex;
         private int frameIndex;
         private bool initialMenuScheduled = true;
+        private SessionStateFile<ReefSettings> settingsFile;
+        private SessionStateFile<ReefExperience> experienceFile;
+        private SwimMotor motor;
+        private Font menuFont;
+        private readonly System.Collections.Generic.Dictionary<string[], string[]> translatedLabels = new();
+        private static readonly string[] Languages = { "한국어", "English" };
+        private string lastSettings;
+        private string lastExperience;
+        private string saveWarning;
+        private float nextSave;
+        private int systemVSync;
         private static readonly int[] TimerMinutes = { 0, 5, 15, 30 };
         private static readonly int[] FrameLimits = { -1, 30, 60, 120 };
         private static readonly string[] TimerLabels = { "Off", "5 min", "15 min", "30 min" };
@@ -35,6 +49,41 @@ namespace BlueHour.Session
         private static readonly string[] WeatherLabels = { "Auto", "Clear", "Overcast", "Rain" };
         private static readonly string[] SoundLabels = { "Water", "Ambient music", "Alternate", "Mute" };
         private static readonly string[] QualityLabels = { "Low", "High" };
+
+        private void Awake()
+        {
+            menuFont = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Arial" }, 16);
+            motor = viewer.GetComponentInParent<SwimMotor>();
+            systemVSync = QualitySettings.vSyncCount;
+        }
+
+        private void Start()
+        {
+            if (Application.isBatchMode)
+                return;
+
+            var directory = Path.Combine(Application.persistentDataPath, "SaveData");
+            settingsFile = new SessionStateFile<ReefSettings>(directory, "settings");
+            experienceFile = new SessionStateFile<ReefExperience>(directory, "experience");
+            var settings = settingsFile.Load(ValidSettings);
+            var experience = experienceFile.Load(ValidExperience);
+            ApplySettings(settings);
+
+            if (experience.regionId == environment.Region.RegionId
+                && motor.TryRestorePose(experience.position, experience.yaw, experience.pitch))
+                guided.SetMode((ViewingMode)experience.viewingMode);
+
+            saveWarning = settingsFile.Warning ?? experienceFile.Warning;
+            nextSave = Time.unscaledTime + 4f;
+        }
+
+        private void OnApplicationQuit() => SaveProgress();
+
+        private void OnDestroy()
+        {
+            if (menuFont != null)
+                Destroy(menuFont);
+        }
 
         private void OnEnable() => guided.TimerExpired += OpenMenu;
         private void OnDisable()
@@ -53,6 +102,11 @@ namespace BlueHour.Session
             }
 
             guided.Paused = panel != Panel.Closed || book.IsBusy;
+            if (settingsFile != null && Time.unscaledTime >= nextSave)
+            {
+                nextSave = Time.unscaledTime + 4f;
+                SaveProgress();
+            }
             var key = Keyboard.current;
             if (key == null || !Application.isFocused || book.IsBusy)
                 return;
@@ -109,6 +163,9 @@ namespace BlueHour.Session
                 return;
             }
 
+            var previousFont = GUI.skin.font;
+            if (menuFont != null)
+                GUI.skin.font = menuFont;
             var width = panel == Panel.Map ? 560f : 460f;
             width = Mathf.Min(width, Screen.width - 32f);
             var left = (Screen.width - width) * 0.5f;
@@ -121,20 +178,22 @@ namespace BlueHour.Session
                 case Panel.Quit: DrawQuit(); break;
             }
             GUILayout.EndArea();
+            GUI.skin.font = previousFont;
         }
 
         private void DrawMenu()
         {
             GUILayout.Label("Blue Hour");
             GUILayout.Label(CurrentLocation());
-            var mode = GUILayout.SelectionGrid((int)guided.Mode, ViewingLabels, 4);
+            if (!string.IsNullOrEmpty(saveWarning)) GUILayout.Label(saveWarning);
+            var mode = GUILayout.SelectionGrid((int)guided.Mode, Localized(ViewingLabels), 4);
             if ((ViewingMode)mode != guided.Mode)
                 guided.SetMode((ViewingMode)mode);
             if (guided.Mode != ViewingMode.Manual)
             {
                 GUILayout.Label($"Viewing speed · {guided.Speed:F1} m/s");
                 guided.Speed = GUILayout.HorizontalSlider(guided.Speed, 0.6f, 4.0f);
-                var next = GUILayout.SelectionGrid(timerIndex, TimerLabels, 4);
+                var next = GUILayout.SelectionGrid(timerIndex, Localized(TimerLabels), 4);
                 if (next != timerIndex)
                 {
                     timerIndex = next;
@@ -142,74 +201,77 @@ namespace BlueHour.Session
                 }
                 if (guided.TimerRemaining > 0f)
                     GUILayout.Label($"Timer · {Mathf.CeilToInt(guided.TimerRemaining)} s");
-                if (timerIndex != 0 && guided.TimerRemaining == 0f && GUILayout.Button("Restart timer"))
+                if (timerIndex != 0 && guided.TimerRemaining == 0f && GUILayout.Button(ReefLanguage.Text("Restart timer")))
                     guided.SetTimer(TimerMinutes[timerIndex] * 60f);
             }
 
-            if (GUILayout.Button("Resume"))
+            if (GUILayout.Button(ReefLanguage.Text("Resume")))
                 ChangePanel(Panel.Closed);
-            if (GUILayout.Button("Map"))
+            if (GUILayout.Button(ReefLanguage.Text("Map")))
                 ChangePanel(Panel.Map);
-            if (GUILayout.Button("Settings"))
+            if (GUILayout.Button(ReefLanguage.Text("Settings")))
                 ChangePanel(Panel.Settings);
-            if (GUILayout.Button("Field guide"))
+            if (GUILayout.Button(ReefLanguage.Text("Field guide")))
             {
                 ChangePanel(Panel.Closed);
                 book.OpenGuide();
             }
-            if (GUILayout.Button("Journal"))
+            if (GUILayout.Button(ReefLanguage.Text("Journal")))
             {
                 ChangePanel(Panel.Closed);
                 book.OpenJournal();
             }
-            if (GUILayout.Button("Album"))
+            if (GUILayout.Button(ReefLanguage.Text("Album")))
             {
                 ChangePanel(Panel.Closed);
                 book.OpenAlbum();
             }
-            if (GUILayout.Button("Exit Blue Hour"))
+            if (GUILayout.Button(ReefLanguage.Text("Exit Blue Hour")))
                 ChangePanel(Panel.Quit);
         }
 
         private void DrawSettings()
         {
-            GUILayout.Label("Settings");
-            showDepth = GUILayout.Toggle(showDepth, "Depth and habitat HUD");
-            showFocus = GUILayout.Toggle(showFocus, "Species focus HUD");
-            showEnvironment = GUILayout.Toggle(showEnvironment, "Environment panel");
-            hideAll = GUILayout.Toggle(hideAll, "Hide all HUD");
+            GUILayout.Label(ReefLanguage.Text("Settings"));
+            var language = GUILayout.SelectionGrid(ReefLanguage.IsKorean ? 0 : 1, Languages, 2);
+            ReefLanguage.IsKorean = language == 0;
+            showDepth = GUILayout.Toggle(showDepth, ReefLanguage.Text("Depth and habitat HUD"));
+            showFocus = GUILayout.Toggle(showFocus, ReefLanguage.Text("Species focus HUD"));
+            showEnvironment = GUILayout.Toggle(showEnvironment, ReefLanguage.Text("Environment panel"));
+            hideAll = GUILayout.Toggle(hideAll, ReefLanguage.Text("Hide all HUD"));
             UpdateHud();
 
-            GUILayout.Label("Water effects");
-            var quality = GUILayout.SelectionGrid((int)waterVisual.Quality, QualityLabels, 2);
+            GUILayout.Label(ReefLanguage.Text("Water effects"));
+            var quality = GUILayout.SelectionGrid((int)waterVisual.Quality, Localized(QualityLabels), 2);
             if (quality != (int)waterVisual.Quality)
                 waterVisual.SetQuality((WaterQuality)quality);
-            GUILayout.Label("Frame limit");
-            var nextFrame = GUILayout.SelectionGrid(frameIndex, FrameLabels, 4);
+            GUILayout.Label(ReefLanguage.Text("Frame limit"));
+            var nextFrame = GUILayout.SelectionGrid(frameIndex, Localized(FrameLabels), 4);
             if (nextFrame != frameIndex)
             {
                 frameIndex = nextFrame;
-                Application.targetFrameRate = FrameLimits[nextFrame];
+                SetFrameLimit();
             }
             GUILayout.Label($"Ambience · {waterAudio.AmbienceVolume:P0}");
             waterAudio.SetAmbienceVolume(GUILayout.HorizontalSlider(waterAudio.AmbienceVolume, 0f, 1f));
             GUILayout.Label($"Music · {waterAudio.MusicVolume:P0}");
             waterAudio.SetMusicVolume(GUILayout.HorizontalSlider(waterAudio.MusicVolume, 0f, 1f));
-            waterAudio.SetMode((WaterAudioMode)GUILayout.SelectionGrid((int)waterAudio.Mode, SoundLabels, 2));
+            waterAudio.SetMode((WaterAudioMode)GUILayout.SelectionGrid((int)waterAudio.Mode, Localized(SoundLabels), 2));
 
             var weather = environment.WeatherOverride.HasValue ? (int)environment.WeatherOverride.Value + 1 : 0;
-            var selection = GUILayout.SelectionGrid(weather, WeatherLabels, 4);
+            var selection = GUILayout.SelectionGrid(weather, Localized(WeatherLabels), 4);
             if (selection != weather)
                 environment.SetWeather(selection == 0 ? (Weather?)null : (Weather)(selection - 1));
 
-            if (GUILayout.Button("Back"))
+            if (GUILayout.Button(ReefLanguage.Text("Back")))
                 OpenMenu();
         }
 
         private void DrawMap()
         {
-            GUILayout.Label(environment.Region.EnglishName + " · north up");
+            GUILayout.Label((ReefLanguage.IsKorean ? environment.Region.KoreanName : environment.Region.EnglishName) + " · " + ReefLanguage.Text("north up"));
             GUILayout.Label(CurrentLocation());
+            if (!string.IsNullOrEmpty(saveWarning)) GUILayout.Label(saveWarning);
             var map = GUILayoutUtility.GetRect(320f, Mathf.Min(380f, Screen.height - 160f), GUILayout.ExpandWidth(true));
             var bounds = environment.Region.SwimBounds;
             var regionMin = bounds.min;
@@ -219,29 +281,126 @@ namespace BlueHour.Session
                 var x2 = map.xMin + (zone.Max.x - regionMin.x) / bounds.size.x * map.width;
                 var y1 = map.yMax - (zone.Max.y - regionMin.z) / bounds.size.z * map.height;
                 var y2 = map.yMax - (zone.Min.y - regionMin.z) / bounds.size.z * map.height;
-                GUI.Box(Rect.MinMaxRect(x1, y1, x2, y2), zone.EnglishName);
+                GUI.Box(Rect.MinMaxRect(x1, y1, x2, y2), ReefLanguage.IsKorean ? zone.KoreanName : zone.EnglishName);
             }
             var position = viewer.transform.position;
             var px = map.xMin + (position.x - regionMin.x) / bounds.size.x * map.width;
             var py = map.yMax - (position.z - regionMin.z) / bounds.size.z * map.height;
             GUI.Label(new Rect(px - 5f, py - 11f, 22f, 24f), "●");
-            if (GUILayout.Button("Back"))
+            if (GUILayout.Button(ReefLanguage.Text("Back")))
                 OpenMenu();
         }
 
         private void DrawQuit()
         {
-            GUILayout.Label("Exit Blue Hour?");
-            if (GUILayout.Button("Exit"))
+            GUILayout.Label(ReefLanguage.Text("Exit Blue Hour?"));
+            if (GUILayout.Button(ReefLanguage.Text("Exit")))
                 Application.Quit();
-            if (GUILayout.Button("Cancel"))
+            if (GUILayout.Button(ReefLanguage.Text("Cancel")))
                 OpenMenu();
         }
+
+        private string[] Localized(string[] labels)
+        {
+            if (!ReefLanguage.IsKorean)
+                return labels;
+            if (!translatedLabels.TryGetValue(labels, out var translated))
+            {
+                translated = Array.ConvertAll(labels, ReefLanguage.Text);
+                translatedLabels.Add(labels, translated);
+            }
+            return translated;
+        }
+
+        private void SetFrameLimit()
+        {
+            Application.targetFrameRate = FrameLimits[frameIndex];
+            QualitySettings.vSyncCount = frameIndex == 0 ? systemVSync : 0;
+        }
+
+        private void ApplySettings(ReefSettings settings)
+        {
+            ReefLanguage.IsKorean = settings.korean;
+            showDepth = settings.showDepth;
+            showFocus = settings.showFocus;
+            showEnvironment = settings.showEnvironment;
+            hideAll = settings.hideAll;
+            frameIndex = settings.frameIndex;
+            SetFrameLimit();
+            waterVisual.SetQuality((WaterQuality)settings.quality);
+            waterAudio.SetMode((WaterAudioMode)settings.soundMode);
+            waterAudio.SetAmbienceVolume(settings.ambience);
+            waterAudio.SetMusicVolume(settings.music);
+            guided.Speed = settings.viewingSpeed;
+            environment.SetSeason(settings.season < 0 ? (Season?)null : (Season)settings.season);
+            environment.SetWeather(settings.weather < 0 ? (Weather?)null : (Weather)settings.weather);
+            if (settings.timeMode == (int)ClockMode.Fixed && DateTimeOffset.TryParse(settings.fixedLocalTime, out var fixedTime))
+                environment.RestoreFixedTime(fixedTime);
+            else
+                environment.SetTimeMode((ClockMode)settings.timeMode);
+            UpdateHud();
+        }
+
+        private void SaveProgress()
+        {
+            if (settingsFile == null || experienceFile == null)
+                return;
+
+            try
+            {
+                var settings = new ReefSettings
+                {
+                    korean = ReefLanguage.IsKorean, showDepth = showDepth, showFocus = showFocus,
+                    showEnvironment = showEnvironment, hideAll = hideAll, quality = (int)waterVisual.Quality,
+                    frameIndex = frameIndex, soundMode = (int)waterAudio.Mode, ambience = waterAudio.AmbienceVolume,
+                    music = waterAudio.MusicVolume, viewingSpeed = guided.Speed,
+                    weather = environment.WeatherOverride.HasValue ? (int)environment.WeatherOverride.Value : -1,
+                    season = environment.SeasonOverride.HasValue ? (int)environment.SeasonOverride.Value : -1,
+                    timeMode = (int)environment.TimeMode,
+                    fixedLocalTime = environment.TimeMode == ClockMode.Fixed ? environment.ViewerSnapshot.LocalTime.ToString("O") : null
+                };
+                var experience = new ReefExperience
+                {
+                    regionId = environment.Region.RegionId, position = motor.transform.position,
+                    yaw = motor.transform.eulerAngles.y, pitch = motor.ViewPitch, viewingMode = (int)guided.Mode
+                };
+                SaveChanged(settingsFile, settings, ValidSettings, ref lastSettings);
+                SaveChanged(experienceFile, experience, ValidExperience, ref lastExperience);
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or ArgumentException)
+            {
+                saveWarning = exception.Message;
+            }
+        }
+
+        private static void SaveChanged<T>(SessionStateFile<T> file, T state, Func<T, bool> validate,
+            ref string previous) where T : VersionedState, new()
+        {
+            var signature = JsonUtility.ToJson(state);
+            if (signature == previous)
+                return;
+            file.Save(state, validate);
+            previous = signature;
+        }
+
+        private static bool ValidSettings(ReefSettings value) =>
+            value.quality >= 0 && value.quality <= 1 && value.frameIndex >= 0 && value.frameIndex < FrameLimits.Length
+            && value.soundMode >= 0 && value.soundMode <= 3 && value.ambience >= 0f && value.ambience <= 1f
+            && value.music >= 0f && value.music <= 1f && value.viewingSpeed >= 0.6f && value.viewingSpeed <= 4f
+            && value.season >= -1 && value.season <= 3 && value.weather >= -1 && value.weather <= 2
+            && value.timeMode >= 0 && value.timeMode <= 2;
+
+        private static bool ValidExperience(ReefExperience value) =>
+            !string.IsNullOrWhiteSpace(value.regionId) && float.IsFinite(value.position.x)
+            && float.IsFinite(value.position.y) && float.IsFinite(value.position.z)
+            && float.IsFinite(value.yaw) && float.IsFinite(value.pitch)
+            && value.viewingMode >= 0 && value.viewingMode <= 3;
 
         private string CurrentLocation()
         {
             var sample = environment.ViewerSnapshot;
-            return $"{sample.Habitat?.EnglishName} · {sample.DepthM:F1} m";
+            var habitat = ReefLanguage.IsKorean ? sample.Habitat?.KoreanName : sample.Habitat?.EnglishName;
+            return $"{habitat} · {sample.DepthM:F1} m";
         }
     }
 }
