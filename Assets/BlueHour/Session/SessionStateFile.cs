@@ -16,6 +16,7 @@ namespace BlueHour.Session
     public sealed class ReefSettings : VersionedState
     {
         public bool korean = true;
+        public int textSize;
         public bool showDepth;
         public bool showFocus = true;
         public bool showEnvironment = true;

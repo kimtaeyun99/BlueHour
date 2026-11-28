@@ -7,6 +7,7 @@ namespace BlueHour.Localization
     {
         private static readonly Dictionary<string, string> Korean = new Dictionary<string, string>(StringComparer.Ordinal)
         {
+            ["Text size"] = "글자 크기", ["Normal"] = "기본", ["Large"] = "크게", ["Extra large"] = "매우 크게",
             ["Manual"] = "자유 유영", ["Fixed"] = "고정 감상", ["Route"] = "경로 유영", ["Follow"] = "생물 따라가기",
             ["Resume"] = "체험 시작", ["Map"] = "지도", ["Settings"] = "설정", ["Field guide"] = "도감",
             ["Journal"] = "일지", ["Album"] = "앨범", ["Close"] = "닫기", ["Back"] = "뒤로",
@@ -51,6 +52,7 @@ namespace BlueHour.Localization
         };
 
         public static bool IsKorean { get; set; } = true;
+        public static float UiScale { get; set; } = 1f;
 
         public static string Describe(string speciesId, string english) =>
             IsKorean && Education.TryGetValue(speciesId, out var translation) ? translation : english;
