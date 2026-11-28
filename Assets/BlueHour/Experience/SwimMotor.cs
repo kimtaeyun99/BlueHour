@@ -42,6 +42,26 @@ namespace BlueHour.Experience
             controller.Move(displacement);
         }
 
+        public void GuideTowards(Vector3 destination, Vector3 lookAt, float metresPerSecond, float deltaTime)
+        {
+            var position = transform.position;
+            var target = swimBounds.ClosestPoint(destination);
+            var displacement = Vector3.ClampMagnitude(target - position, metresPerSecond * deltaTime);
+            controller.Move(displacement);
+
+            var direction = lookAt - view.position;
+            if (direction.sqrMagnitude < 0.01f)
+                return;
+
+            var horizontal = new Vector3(direction.x, 0f, direction.z);
+            if (horizontal.sqrMagnitude > 0.001f)
+                transform.rotation = Quaternion.RotateTowards(transform.rotation,
+                    Quaternion.LookRotation(horizontal, Vector3.up), deltaTime * 40f);
+            var targetPitch = Mathf.Clamp(-Mathf.Atan2(direction.y, horizontal.magnitude) * Mathf.Rad2Deg, -75f, 75f);
+            pitch = Mathf.MoveTowards(pitch, targetPitch, deltaTime * 32f);
+            view.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+        }
+
         private static float LimitAxis(float position, float displacement, float min, float max, float fadeDistance)
         {
             var distance = Mathf.Max(0f, displacement < 0f ? position - min : max - position);
