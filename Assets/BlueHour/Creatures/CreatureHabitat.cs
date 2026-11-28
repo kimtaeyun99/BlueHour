@@ -91,6 +91,7 @@ namespace BlueHour.Creatures
                 for (var member = 0; member < group.Agents.Length; member++)
                 {
                     var view = Instantiate(species.Prototype, transform);
+                    view.BindSpecies(species);
                     view.name = species.KoreanName + " " + (member + 1);
                     view.Clear();
                     group.Agents[member] = new Agent { View = view };

@@ -8,6 +8,9 @@ namespace BlueHour.Creatures
         private Quaternion[] restPose;
         private float phase;
 
+        public SpeciesDefinition Species { get; private set; }
+        public void BindSpecies(SpeciesDefinition definition) => Species = definition;
+
         private void Awake()
         {
             restPose = new Quaternion[animatedParts.Length];

@@ -13,6 +13,8 @@ namespace BlueHour.Experience
         private InputAction capture;
         private InputAction release;
         private bool captured;
+        private bool panelOpen;
+        private bool restoreCapture;
 
         private void Awake()
         {
@@ -47,8 +49,27 @@ namespace BlueHour.Experience
                 SetCaptured(true);
         }
 
+        public void BlockForPanel(bool blocked)
+        {
+            if (panelOpen == blocked)
+                return;
+
+            panelOpen = blocked;
+            if (blocked)
+            {
+                restoreCapture = captured;
+                SetCaptured(false);
+            }
+            else if (restoreCapture && Application.isFocused && !Application.isBatchMode)
+            {
+                SetCaptured(true);
+            }
+        }
+
         private void Update()
         {
+            if (panelOpen)
+                return;
             if (release.WasPressedThisFrame())
                 SetCaptured(false);
             else if (capture.WasPressedThisFrame() && !captured && Application.isFocused)
